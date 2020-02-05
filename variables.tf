@@ -7,21 +7,6 @@ variable "instance_type" {
   description = "The machine type to launch, some machines may offer higher throughput for higher use cases."
 }
 
-variable "asg_min_size" {
-  default     = 1
-  description = "We may want more than one machine in a scaling group, but 1 is recommended."
-}
-
-variable "asg_desired_capacity" {
-  default     = 1
-  description = "We may want more than one machine in a scaling group, but 1 is recommended."
-}
-
-variable "asg_max_size" {
-  default     = 1
-  description = "We may want more than one machine in a scaling group, but 1 is recommended."
-}
-
 variable "vpc_id" {
   description = "The VPC ID in which Terraform will launch the resources."
 }
@@ -60,12 +45,6 @@ variable "additional_security_group_ids" {
   type        = list(string)
   default     = [""]
   description = "Additional security groups if provided, default empty"
-}
-
-variable "target_group_arns" {
-  type        = list(string)
-  default     = null
-  description = "Running a scaling group behind an LB requires this variable, default null means it won't be included if not set"
 }
 
 variable "env" {
