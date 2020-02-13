@@ -46,7 +46,6 @@ locals {
 }
 
 resource "aws_instance" "wireguard" {
-  name_prefix                 = "${var.env}-wireguard-"
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   key_name                    = var.ssh_key_id
@@ -54,4 +53,8 @@ resource "aws_instance" "wireguard" {
   user_data                   = data.template_file.user_data.rendered
   security_groups             = local.security_groups_ids
   associate_public_ip_address = true
+
+  tags = {
+    Name = "${var.env}-wireguard-"
+  }
 }
