@@ -41,6 +41,7 @@ resource "aws_instance" "wireguard" {
   key_name                    = var.ssh_key_id
   iam_instance_profile        = aws_iam_instance_profile.wireguard_profile[0].name
   user_data                   = data.template_file.user_data.rendered
+  subnet_id                   = var.subnet_ids[0]
   vpc_security_group_ids      = [aws_security_group.sg_wireguard_external.id]
   associate_public_ip_address = true
 
