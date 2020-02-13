@@ -45,17 +45,13 @@ locals {
   security_groups_ids = compact(concat(var.additional_security_group_ids, local.sg_wireguard_external))
 }
 
-resource "aws_launch_configuration" "wireguard_launch_config" {
-  name_prefix                 = "wireguard-${var.env}-"
-  image_id                    = data.aws_ami.ubuntu.id
+resource "aws_instance" "wireguard" {
+  name_prefix                 = "${var.env}-wireguard-"
+  ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   key_name                    = var.ssh_key_id
-  iam_instance_profile        = (var.eip_id != "disabled" ? aws_iam_instance_profile.wireguard_profile[0].name : null)
+  iam_instance_profile        = aws_iam_instance_profile.wireguard_profile[0].name
   user_data                   = data.template_file.user_data.rendered
   security_groups             = local.security_groups_ids
-  associate_public_ip_address = (var.eip_id != "disabled" ? true : false)
-
-  lifecycle {
-    create_before_destroy = true
-  }
+  associate_public_ip_address = true
 }
