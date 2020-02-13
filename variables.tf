@@ -2,10 +2,6 @@ variable "aws_region" {
   description = "AWS region."
 }
 
-variable "aws_profile" {
-  description = "AWS credentials profile name."
-}
-
 variable "ssh_key_id" {
   description = "A SSH public key ID to add to the VPN instance."
 }
