@@ -40,18 +40,13 @@ locals {
   sg_wireguard_external = sort([aws_security_group.sg_wireguard_external.id])
 }
 
-# clean up and concat the above wireguard default sg with the additional_security_group_ids
-locals {
-  security_groups_ids = compact(concat(var.additional_security_group_ids, local.sg_wireguard_external))
-}
-
 resource "aws_instance" "wireguard" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   key_name                    = var.ssh_key_id
   iam_instance_profile        = aws_iam_instance_profile.wireguard_profile[0].name
   user_data                   = data.template_file.user_data.rendered
-  security_groups             = local.security_groups_ids
+  security_groups             = compact(local.sg_wireguard_external)
   associate_public_ip_address = true
 
   tags = {
