@@ -35,21 +35,16 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-# turn the sg into a sorted list of string
-locals {
-  sg_wireguard_external = sort([aws_security_group.sg_wireguard_external.id])
-}
-
 resource "aws_instance" "wireguard" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
   key_name                    = var.ssh_key_id
   iam_instance_profile        = aws_iam_instance_profile.wireguard_profile[0].name
   user_data                   = data.template_file.user_data.rendered
-  security_groups             = compact(local.sg_wireguard_external)
+  security_groups             = [aws_security_group.sg_wireguard_external.id]
   associate_public_ip_address = true
 
   tags = {
-    Name = "${var.env}-wireguard-"
+    Name = "${var.env}-wireguard"
   }
 }
